@@ -10,15 +10,15 @@ import org.apache.logging.log4j.Logger;
 /**
  * ChipDevTools, because why make development harder?
  *
- * @author Chipmunnk
+ * @author Chipmunk
  */
 
 @Mod(ChipDevReference.MOD_ID)
 public class ChipDevTools {
-    public static final Logger LOGGER = LogManager.getLogger(ChipDevReference.MOD_ID);
-    public static final String MOD_ID = ChipDevReference.MOD_ID;
+    public static final Logger LOGGER     = LogManager.getLogger(ChipDevReference.MOD_ID);
+    public static final String MOD_ID     = ChipDevReference.MOD_ID;
     public static final String MOD_PREFIX = ChipDevReference.MOD_PREFIX;
-    public static final String MOD_NAME = ChipDevReference.MOD_NAME;
+    public static final String MOD_NAME   = ChipDevReference.MOD_NAME;
 
     public ChipDevTools() {
 
