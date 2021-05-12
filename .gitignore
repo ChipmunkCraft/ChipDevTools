@@ -1,5 +1,20 @@
+#Files
+.classpath
+chipdevtools.code-workspace
+.project
+
 # Compiled class file
 *.class
+
+# Folders
+.gradle
+.vscode
+bin
+build
+run
+src/generated
+src/test
+.settings
 
 # Log file
 *.log
@@ -11,7 +26,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
