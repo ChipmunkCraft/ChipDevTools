@@ -63,7 +63,7 @@ public class Utils {
             long strLength = str.length();
             helper.setClipboard(strLength, str);
         } catch (Exception e) {
-            logMsg("Not Copied to Clipboard! Error: " + e,"info");
+            logMsg("Not Copied to Clipboard! Error: " + e,"warn");
         }
     }
 }

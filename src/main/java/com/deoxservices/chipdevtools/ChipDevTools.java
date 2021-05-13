@@ -23,9 +23,7 @@ public class ChipDevTools {
     public ChipDevTools() {
 
         Utils.logMsg("ChipDev Loading...","info");
-
         MinecraftForge.EVENT_BUS.register(this);
-
         MinecraftForge.EVENT_BUS.register(RegisterCommandEvent.class);
         Utils.logMsg("Registered Commands Event","info");
 
