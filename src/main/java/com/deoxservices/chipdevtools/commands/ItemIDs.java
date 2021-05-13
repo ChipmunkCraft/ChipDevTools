@@ -14,8 +14,7 @@ import net.minecraft.item.ItemStack;
 public class ItemIDs {
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         LiteralArgumentBuilder<CommandSource> cdt
-        = Commands.literal("chipdevtools")
-            .redirect("cdt")
+        = Commands.literal("cdt")
             .requires((commandSource) -> commandSource.hasPermission(1))
             .then(Commands.literal("hand")
                     .executes(commandContext -> runCDT(commandContext,"hand"))
