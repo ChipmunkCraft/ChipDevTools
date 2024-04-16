@@ -33,6 +33,6 @@ More features will be implemented in the future; however, this is all that is ne
 
 Please feel free to put in a feature request through the issue tracker (*feature suggestions are not guaranteed to be implemented*).
 
-***NOTE:*** We are porting NeoForge
+***NOTE:*** We are porting to NeoForge
 
 [ [Feature Request](https://github.com/ChipmunkCraft/ChipDevTools/issues/new?assignees=&labels=enhancement&template=FEATURE_REQUEST.md) | [Submit Bug Report](https://github.com/ChipmunkCraft/ChipDevTools/issues/new?assignees=&labels=bug&template=BUG_REPORT.md) ]
