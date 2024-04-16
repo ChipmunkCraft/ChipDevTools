@@ -1,35 +1,22 @@
 package com.deoxservices.chipdevtools.utils;
 
 import com.deoxservices.chipdevtools.ChipDevTools;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.client.ClipboardHelper;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ChatType;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.platform.ClipboardManager;
+import net.minecraft.network.chat.Component;
 
 public class Utils {
 
-    public Utils() {
-        logMsg("Initialized Utilities","info");
-    }
-
     /**
-     * Broadcast message to chat
-     * @param commandContext CommandContext<CommandSource>
+     * Send message to chat
+     * @param player Player
      * @param msg Message to send
      */
-    public static void sendMessage(CommandContext<CommandSource> commandContext, String msg) throws CommandSyntaxException {
-        ServerPlayerEntity player = commandContext.getSource().getPlayerOrException();
-        if (player != null) {
-            commandContext.getSource().getServer().getPlayerList().broadcastMessage(new StringTextComponent(msg), ChatType.CHAT, player.getUUID());
-        } else {
-            commandContext.getSource().getServer().getPlayerList().broadcastMessage(new StringTextComponent(msg), ChatType.SYSTEM, Util.NIL_UUID);
+    public static void sendMessage(String msg) {
+        if (ChipDevTools.mc.player != null) {
+            ChipDevTools.mc.player.displayClientMessage(Component.literal(msg), false);
         }
-        logMsg("Message Sent","info");
     }
+
     /**
      * Log Message
      * @param msg Message to log
@@ -59,9 +46,10 @@ public class Utils {
      */
     public static void clipboardCopy(String str) {
         try {
-            ClipboardHelper helper = new ClipboardHelper();
+            ClipboardManager manager = new ClipboardManager();
             long strLength = str.length();
-            helper.setClipboard(strLength, str);
+            manager.setClipboard(strLength, str);
+            
         } catch (Exception e) {
             logMsg("Not Copied to Clipboard! Error: " + e,"warn");
         }

@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[49,)"
 license="Apache 2.0 License"
 issueTrackerURL="https://github.com/ChipmunkCraft/ChipDevTools/issues"
 [[mods]]
 modId="chipdevtools"
-version="${file.jarVersion}"
+version="0.2.0"
 displayName="ChipDevTools"
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json"
@@ -18,13 +18,13 @@ Chipmunks Dev Tools provides some tools to aid in the development of mods and mo
 [[dependencies.chipdevtools]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[49,)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 # Here's another dependency
 [[dependencies.chipdevtools]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.20.4,1.21)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"

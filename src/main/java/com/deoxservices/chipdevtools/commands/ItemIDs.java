@@ -1,118 +1,170 @@
 package com.deoxservices.chipdevtools.commands;
 
+import com.deoxservices.chipdevtools.ChipDevTools;
 import com.deoxservices.chipdevtools.utils.Utils;
+import com.deoxservices.chipdevtools.client.ClientProxy;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
 
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ItemIDs {
-    public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralArgumentBuilder<CommandSource> cdt
-        = Commands.literal("cdt")
-            .requires((commandSource) -> commandSource.hasPermission(1))
-            .then(Commands.literal("hand")
-                    .executes(commandContext -> runCDT(commandContext,"hand"))
-                )
-            .then(Commands.literal("hotbar")
-                    .executes(commandContext -> runCDT(commandContext,"hotbar"))
-                )
-            .then(Commands.literal("inventory")
-                    .executes(commandContext -> runCDT(commandContext,"inventory"))
-                )
-            .then(Commands.literal("fullinv")
-                    .executes(commandContext -> runCDT(commandContext,"fullinv"))
-        );
-    dispatcher.register(cdt);
+
+    private static Player player = ChipDevTools.mc.player;
+
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+        final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("cdt");
+
+        root.requires((sourceStack) -> sourceStack.hasPermission(2))
+            .then(Commands.literal("hand").executes(commandContext -> runCDT("hand")))
+            .then(Commands.literal("offhand").executes(commandContext -> runCDT("offhand")))
+            .then(Commands.literal("hotbar").executes(commandContext -> runCDT("hotbar")))
+            .then(Commands.literal("inventory").executes(commandContext -> runCDT("inventory")))
+            .then(Commands.literal("all").executes(commandContext -> runCDT("all")))
+        ;
+
+        dispatcher.register(root);
     }
 
     /**
      * Runs the /cdt command
-     * @param commandContext  CommandContext<CommandSource>
-     * @param type   Command Arguments
-     * @return 1
+     * @param commandContext CommandContext<CommandSourceStack>
+     * @param type Command Argument Type
+     * @return 1 int
      */
-    static int runCDT(CommandContext<CommandSource> commandContext, String type) throws CommandSyntaxException {
-
-        ServerPlayerEntity player = commandContext.getSource().getPlayerOrException();
+    private static int runCDT(String type) throws CommandSyntaxException {
         if (player != null) {
             switch(type) {
                 case "hand" :
-                    ItemStack itemStackHand = player.getMainHandItem();       // Get Main Hand itemStack
-                    String itemNameHand = formatDescriptionId(itemStackHand); // return example: minecraft:oak_planks OR minecraft:apple
-                    Utils.clipboardCopy(itemNameHand);                        // Put formatted DescriptionID in the clipboard
-                    Utils.sendMessage(commandContext,"Copied to Clipboard!"); // Alert the player the String has been copied
-                    Utils.sendMessage(commandContext,itemNameHand);           // Put the result in chat, so the user knows what the result was
-                return 1;
-
+                    ItemStack itemStackHand = player.getItemBySlot(EquipmentSlot.MAINHAND);               // Get Main Hand itemStack
+                    String itemNameHand = formatDescriptionId(itemStackHand);         // return example: minecraft:oak_planks OR minecraft:apple
+                    if (!itemNameHand.equals("minecraft:air")) {             // Make sure to skip minecraft:air
+                        Utils.clipboardCopy(itemNameHand);                            // Put formatted DescriptionID in the clipboard
+                        Utils.sendMessage("Copied "+type+" to Clipboard!"); // Alert the player the String has been copied
+                        Utils.sendMessage(itemNameHand);               // Put the result in chat, so the user knows what the result was
+                    }
+                    else
+                    {
+                        Utils.sendMessage("Nothing to copy!"); // Alert player if there was nothing to copy
+                    }
+                break;
+                case "offhand" :
+                    ItemStack itemStackOffhand = player.getItemBySlot(EquipmentSlot.OFFHAND);               // Get Offhand itemStack
+                    String itemNameOffhand = formatDescriptionId(itemStackOffhand);     // return example: minecraft:oak_planks OR minecraft:apple
+                    if (!itemNameOffhand.equals("minecraft:air")) {                // Make sure to skip minecraft:air
+                        Utils.clipboardCopy(itemNameOffhand);                           // Put formatted DescriptionID in the clipboard
+                        Utils.sendMessage("Copied "+type+" to Clipboard!");   // Alert the player the String has been copied
+                        Utils.sendMessage(itemNameOffhand);              // Put the result in chat, so the user knows what the result was
+                    }
+                    else
+                    {
+                        Utils.sendMessage("Nothing to copy!"); // Alert player if there was nothing to copy
+                    }
+                break;
                 case "hotbar" :
-                    String itemNameHotbar = getInventoryItems(player,0,8);    // Get hotbar slots and iterate through each one
-                    Utils.clipboardCopy(itemNameHotbar);                      // Put formatted DescriptionIDs in the clipboard each separated by new lines
-                    Utils.sendMessage(commandContext,"Copied to Clipboard!"); // Alert the player the String has been copied
-                    Utils.sendMessage(commandContext,itemNameHotbar);         // Put the result in chat, so the user knows what the result was
-                return 1;
+                    getPlayerInventoryItems(0,8, type); // Get hotbar slots and iterate through each one
+                break;
 
                 case "inventory" :
-                    String itemNameInv = getInventoryItems(player,9,35);       // Get upper inventory slots and iterate through each one
-                    Utils.clipboardCopy(itemNameInv);                          // Put formatted DescriptionIDs in the clipboard each separated by new line
-                    Utils.sendMessage(commandContext,"Copied to Clipboard!");  // Alert the player the String has been copied
-                    Utils.sendMessage(commandContext,itemNameInv);             // Put the result in chat, so the user knows what the result was
-                return 1;
+                    getPlayerInventoryItems(9,35, type); // Get upper inventory slots and iterate through each one
+                break;
 
-                case "fullinv" :
-                    String itemNameFullInv = getInventoryItems(player,0,35);  // Get upper inventory slots and iterate through each one
-                    Utils.clipboardCopy(itemNameFullInv);                     // Put formatted DescriptionIDs in the clipboard each separated by new line
-                    Utils.sendMessage(commandContext,"Copied to Clipboard!"); // Alert the player the String has been copied
-                    Utils.sendMessage(commandContext,itemNameFullInv);        // Put the result in chat, so the user knows what the result was
-                return 1;
-
+                case "all" :  // Include Offhand item (All encompasses the players FULL inventory (Hotbar, upper inventory and offhand))
+                    getPlayerInventoryItems(0,35, type); // Get all inventory slots and iterate through each one TO-DO: include offhand
+                break;
             }
+            
+            return 1;
         } else {
-            // There is something wrong with the ServerPlayerEntity.
-            Utils.sendMessage(commandContext,"Bad ServerPlayerEntity, Sorry! The Princess is in another castle! This should not be possible.");
+            // There is something wrong with the player.
+            Utils.sendMessage("Bad  Sorry! The Princess is in another castle! This should not be possible.");
+            return 0;
         }
-
-        return 1;
     }
 
     /**
      * Formats ItemStack into mod:name eg. minecraft:block
-     * @param itemStack   ItemStack
-     * @TODO: entity and tileEntity are for future use.
+     * @param itemStack ItemStack
      * @return String Formatted item name
      */
     private static String formatDescriptionId(ItemStack itemStack) {
-        String itemName = itemStack.getDescriptionId();              // Get descriptionID for the ItemStack
-        String pattern = "item\\.|block\\.|entity\\.|tileEntity\\."; // Pattern for removing the prefix
-        itemName = itemName.replaceFirst(pattern, "");               // Remove those prefixes
-        itemName = itemName.replaceAll("\\.", ":");                  // replace the period with a colon to correctly format string
+        String itemName = itemStack.getDescriptionId();               // Get descriptionID for the ItemStack
+        String pattern = "item\\.|block\\.|entity\\.|tileEntity\\.";  // Pattern for removing the prefix
+        itemName = itemName.replaceFirst(pattern, "");    // Remove those prefixes
+        itemName = itemName.replaceAll("\\.", ":"); // replace the period with a colon to correctly format string
         return itemName;
     }
 
     /**
      * Iterates through inventory slots and returns formatted ItemStack into mod:name eg. minecraft:block\nminecraft:apple
-     * @param player Player Instance
-     * @param start int Start Index
-     * @param finish int Finish Index
-     * @return String Formatted output
+     * @param start Int Start Index
+     * @param finish Int Finish Index
+     * @param type String Command Type
      */
-    private static String getInventoryItems(ServerPlayerEntity player, int start, int finish) {
-
-        PlayerInventory pInv = player.inventory;
+    private static void getPlayerInventoryItems(int start, int finish, String type) {
+        @SuppressWarnings("null")
+        Inventory pInv = ChipDevTools.mc.player.getInventory();
         String itemNameInv = "";
+        int count = 0;
         for (int i =start; i <= finish; i++) {                      // Iterating through inventory slots from start to finish
             String itemName = formatDescriptionId(pInv.getItem(i)); // return example: minecraft:oak_planks OR minecraft:apple
-            if (!itemName.equals("minecraft:air")) {                // Make sure to skip minecraft:air
+            if (!itemName.equals("minecraft:air")) {       // Make sure to skip minecraft:air
                 itemNameInv += itemName + "\n";                     // Add this itemName to the string list
+                count++;
             }
         }
         String output = itemNameInv.substring(0,itemNameInv.length()-1); // Remove the last \n from the string
 
-        return output;
+        if (count>0) {
+            Utils.clipboardCopy(output);                          // Put formatted DescriptionIDs in the clipboard each separated by new lines
+            Utils.sendMessage("Copied "+type+" to Clipboard!"); // Alert the player the String has been copied
+            Utils.sendMessage(output);                     // Put the result in chat, so the user knows what the result was
+        } else {
+            Utils.sendMessage("Nothing to copy!"); // Alert player if there was nothing to copy
+        }
+    }
+
+    /**
+     * Iterates through inventory slots and returns formatted ItemStack into mod:name eg. minecraft:block\nminecraft:apple
+     */
+    public static void getInventoryItems() {
+        if (ClientProxy.container != null)
+        {
+            int size = ClientProxy.container.getItems().size();
+
+            String itemNames = "";
+            int count = 0;
+            for (int i = 0; i < size; i++) {
+                String itemName = formatDescriptionId(ClientProxy.container.getSlot(i).getItem());
+                if (!itemName.equals("minecraft:air")) {
+                    itemNames += itemName + "\n";
+                    count++;
+                }
+            }
+            String output = itemNames.substring(0,itemNames.length()-1); // Remove the last \n from the string
+
+            if (count>0) {
+                Utils.clipboardCopy(output);                          // Put formatted DescriptionIDs in the clipboard each separated by new lines
+                Utils.sendMessage("Copied items to Clipboard!"); // Alert the player the String has been copied
+                Utils.sendMessage(output);                     // Put the result in chat, so the user knows what the result was
+            } else {
+                Utils.sendMessage("Nothing to copy!"); // Alert player if there was nothing to copy
+            }
+        } else {
+            Utils.logMsg("Container is null","info");
+        }
+    }
+
+    public static void onKeyPressed(int action) {
+        ItemIDs.getInventoryItems();
     }
 }
