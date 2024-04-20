@@ -1,13 +1,19 @@
+/*
+ * Created on Fri Apr 19 2024
+ *
+ * Copyright (c) 2024 DeoX Services
+ */
 package com.deoxservices.chipdevtools;
 
 import com.deoxservices.chipdevtools.client.ClientProxy;
-import com.deoxservices.chipdevtools.commands.RegisterCommandEvent;
+import com.deoxservices.chipdevtools.event.RegisterEvents;
 import com.deoxservices.chipdevtools.utils.Utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 /**
  * ChipDevTools, because why make development harder?
@@ -24,12 +30,13 @@ public class ChipDevTools {
     public static Minecraft mc = Minecraft.getInstance();
 
     public ChipDevTools() {
-        Utils.logMsg("ChipDev Loading...","info");
-        MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(RegisterCommandEvent.class);
-        Utils.logMsg("Registered Commands Event","info");
-        MinecraftForge.EVENT_BUS.addListener(ClientProxy::onInventoryOpen);
-        Utils.logMsg("Registered Inventory Opened Event","info");
-        ClientProxy.init();
+        Utils.logMsg(ChipDevReference.MOD_NAME + " Loading...","info");
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
+        NeoForge.EVENT_BUS.addListener(ClientProxy::registerInventoryOpen);
+        NeoForge.EVENT_BUS.addListener(ClientProxy::registerKeyPressed);
+    }
+
+    private void registerCommands(RegisterCommandsEvent event) {
+        RegisterEvents.registerCDTCommand(event.getDispatcher(), event.getBuildContext());
     }
 }

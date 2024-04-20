@@ -1,3 +1,7 @@
+v1.0
+----------
+Ported to NeoForge v20.4.232
+
 v0.2
 ----------
 Updated to Forge 49.0.38 (Minecraft 1.20.4)

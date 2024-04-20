@@ -1,39 +1,21 @@
-package com.deoxservices.chipdevtools.commands;
+/*
+ * Created on Fri Apr 19 2024
+ *
+ * Copyright (c) 2024 DeoX Services
+ */
+package com.deoxservices.chipdevtools;
 
-import com.deoxservices.chipdevtools.ChipDevTools;
 import com.deoxservices.chipdevtools.utils.Utils;
 import com.deoxservices.chipdevtools.client.ClientProxy;
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ItemIDs {
 
     private static Player player = ChipDevTools.mc.player;
-
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        final LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("cdt");
-
-        root.requires((sourceStack) -> sourceStack.hasPermission(2))
-            .then(Commands.literal("hand").executes(commandContext -> runCDT("hand")))
-            .then(Commands.literal("offhand").executes(commandContext -> runCDT("offhand")))
-            .then(Commands.literal("hotbar").executes(commandContext -> runCDT("hotbar")))
-            .then(Commands.literal("inventory").executes(commandContext -> runCDT("inventory")))
-            .then(Commands.literal("all").executes(commandContext -> runCDT("all")))
-        ;
-
-        dispatcher.register(root);
-    }
 
     /**
      * Runs the /cdt command
@@ -41,7 +23,7 @@ public class ItemIDs {
      * @param type Command Argument Type
      * @return 1 int
      */
-    private static int runCDT(String type) throws CommandSyntaxException {
+    public static int runCDT(String type) throws CommandSyntaxException {
         if (player != null) {
             switch(type) {
                 case "hand" :
@@ -134,7 +116,7 @@ public class ItemIDs {
     }
 
     /**
-     * Iterates through inventory slots and returns formatted ItemStack into mod:name eg. minecraft:block\nminecraft:apple
+     * Iterates through inventory slots and outputs formatted ItemStack into mod:name into the Clipboard eg. minecraft:block\nminecraft:apple
      */
     public static void getInventoryItems() {
         if (ClientProxy.container != null)
@@ -164,7 +146,7 @@ public class ItemIDs {
         }
     }
 
-    public static void onKeyPressed(int action) {
+    /*public static void onKeyPressed(int action) {
         ItemIDs.getInventoryItems();
-    }
+    }*/
 }

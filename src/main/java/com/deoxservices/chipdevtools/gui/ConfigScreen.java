@@ -1,3 +1,8 @@
+/*
+ * Created on Fri Apr 19 2024
+ *
+ * Copyright (c) 2024 DeoX Services
+ */
 package com.deoxservices.chipdevtools.gui;
 
 import com.deoxservices.chipdevtools.ChipDevTools;

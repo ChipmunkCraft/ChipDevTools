@@ -1,5 +1,8 @@
 # ChipDevTools
-#### Chipmunks' Development Tools for Minecraft/Forge Mod/Pack Development
+#### Chipmunks' Development Tools for Minecraft/NeoForge Mod/Pack Development
+
+Minecraft Version: 1.20+
+Neoforge Version: 20.4+
 
 ##### Features:
 * Adds /cdt command
@@ -32,7 +35,5 @@ The true power here is when you are using an IDE/text editor that supports multi
 More features will be implemented in the future; however, this is all that is necessary at the moment.
 
 Please feel free to put in a feature request through the issue tracker (*feature suggestions are not guaranteed to be implemented*).
-
-***NOTE:*** We are porting to NeoForge
 
 [ [Feature Request](https://github.com/ChipmunkCraft/ChipDevTools/issues/new?assignees=&labels=enhancement&template=FEATURE_REQUEST.md) | [Submit Bug Report](https://github.com/ChipmunkCraft/ChipDevTools/issues/new?assignees=&labels=bug&template=BUG_REPORT.md) ]

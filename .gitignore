@@ -9,12 +9,15 @@ chipdevtools.code-workspace
 # Folders
 .gradle
 .vscode
+.eclipse
 bin
 build
 run
 src/generated
 src/test
 .settings
+run-data
+runs
 
 # Log file
 *.log
