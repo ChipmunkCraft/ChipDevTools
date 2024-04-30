@@ -18,14 +18,13 @@ about: If you found a bug / crash while using the mod.
 - [ ] I am crashing and can provide my crash report(s)
 - [ ] I am using the latest version of the mod
 <!-->
-<!-- If your issue matches AT LEAST 2 of the criteria above or 1 of the below, continue. -->
+<!-- If your issue matches AT LEAST 2 of the criteria above or 1 of the below, please continue. -->
 
 <!-- PLEASE FILL IN THE CLIENT INFO -->
 <!-- Client Info -->
 ## Client Info
 * Minecraft Version:
-
-* Forge Version: 
+* NeoForge Version: 
 * Mod Version: 
 * Java Version: 
 

@@ -11,7 +11,7 @@ about: For suggesting changes / additions to the mod.
 ## SUGGESTIONS
 - [ ] I would like to propose new content.
 - [ ] I would like to propose changes.
-- [ ] I would like to propose another thing.
+- [ ] I would like to propose something else.
 
 <!-- SUGGESTIONS INFORMATION - Please explain what you want changed/added and why.
 ## SUGGESTION INFORMATION

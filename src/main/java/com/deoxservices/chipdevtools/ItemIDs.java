@@ -104,9 +104,9 @@ public class ItemIDs {
                 count++;
             }
         }
-        String output = itemNameInv.substring(0,itemNameInv.length()-1); // Remove the last \n from the string
 
         if (count>0) {
+            String output = itemNameInv.substring(0,itemNameInv.length()-1); // Remove the last \n from the string
             Utils.clipboardCopy(output);                          // Put formatted DescriptionIDs in the clipboard each separated by new lines
             Utils.sendMessage("Copied "+type+" to Clipboard!"); // Alert the player the String has been copied
             Utils.sendMessage(output);                     // Put the result in chat, so the user knows what the result was
@@ -132,9 +132,9 @@ public class ItemIDs {
                     count++;
                 }
             }
-            String output = itemNames.substring(0,itemNames.length()-1); // Remove the last \n from the string
 
             if (count>0) {
+                String output = itemNames.substring(0,itemNames.length()-1); // Remove the last \n from the string
                 Utils.clipboardCopy(output);                          // Put formatted DescriptionIDs in the clipboard each separated by new lines
                 Utils.sendMessage("Copied items to Clipboard!"); // Alert the player the String has been copied
                 Utils.sendMessage(output);                     // Put the result in chat, so the user knows what the result was
@@ -145,8 +145,4 @@ public class ItemIDs {
             Utils.logMsg("Container is null","info");
         }
     }
-
-    /*public static void onKeyPressed(int action) {
-        ItemIDs.getInventoryItems();
-    }*/
 }
