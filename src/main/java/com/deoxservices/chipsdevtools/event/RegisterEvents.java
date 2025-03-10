@@ -1,11 +1,7 @@
-/*
- * Created on Fri Apr 19 2024
- *
- * Copyright (c) 2024 DeoX Services
- */
 package com.deoxservices.chipsdevtools.event;
 
 import com.deoxservices.chipsdevtools.ItemIDs;
+import com.deoxservices.chipsdevtools.client.ClientProxyGameEvents;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandBuildContext;
@@ -23,6 +19,7 @@ public class RegisterEvents {
                   .then(Commands.literal("hotbar").executes(commandContext -> ItemIDs.runCDT("hotbar")))
                   .then(Commands.literal("inventory").executes(commandContext -> ItemIDs.runCDT("inventory")))
                   .then(Commands.literal("all").executes(commandContext -> ItemIDs.runCDT("all")))
+                  .then(Commands.literal("disablecopykeys").executes(commandContext -> ClientProxyGameEvents.toggleCopyKeys()))
         ;
         dispatcher.register(cdtCommand);
     }

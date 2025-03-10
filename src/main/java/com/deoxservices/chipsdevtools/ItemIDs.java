@@ -1,8 +1,3 @@
-/*
- * Created on Fri Apr 19 2024
- *
- * Copyright (c) 2024 DeoX Services
- */
 package com.deoxservices.chipsdevtools;
 
 import com.deoxservices.chipsdevtools.utils.Utils;

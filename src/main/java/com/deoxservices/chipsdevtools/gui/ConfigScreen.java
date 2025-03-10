@@ -1,8 +1,3 @@
-/*
- * Created on Fri Apr 19 2024
- *
- * Copyright (c) 2024 DeoX Services
- */
 package com.deoxservices.chipsdevtools.gui;
 
 import com.deoxservices.chipsdevtools.ChipsDevTools;
@@ -24,6 +19,7 @@ public class ConfigScreen {
         keyMapBuilder.put(ClientProxy.COPY_INVENTORY_KEY, ClientProxy.COPY_INVENTORY_KEY.getKey());
         keyMapBuilder.put(ClientProxy.COPY_CONTAINER_KEY, ClientProxy.COPY_CONTAINER_KEY.getKey());
         keyMapBuilder.put(ClientProxy.COPY_ALL_KEY, ClientProxy.COPY_ALL_KEY.getKey());
+        keyMapBuilder.put(ClientProxy.DISABLE_KEYS, ClientProxy.DISABLE_KEYS.getKey());
         var keyMap = keyMapBuilder.build();
         canceller = () -> {
             keyMap.forEach(KeyMapping::setKey);

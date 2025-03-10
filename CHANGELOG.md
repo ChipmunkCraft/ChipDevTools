@@ -1,3 +1,8 @@
+## `v2.0.1` <sub>03/10/2025 13:20</sub>
+- Updated to NeoForge v21.1.133 (Minecraft 1.21.1)
+- Removed unnecessary debug logging (log spam)
+- Added disable copy hotkeys hotkey
+
 ## `v2.0.0` <sub>*03/10/2025 01:56*</sub>
 - Renamed from ChipDevTools to ChipsDevTools
 - Updated to NeoForge v21.1.132 (Minecraft 1.21.1 | ModDevGradle 2.0.78)
