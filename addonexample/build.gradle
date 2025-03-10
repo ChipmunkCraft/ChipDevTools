@@ -1,0 +1,97 @@
+plugins {
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+group = mod_group
+version = mod_version
+
+dependencies {
+    implementation "net.neoforged:neoforge:${rootProject.neoforge_version}"
+    implementation project(':')
+}
+
+java {
+    withSourcesJar()
+}
+
+neoForge {
+    version = rootProject.neoforge_version
+    runs {
+        client {
+            client()
+            gameDirectory = rootProject.file('run')
+            jvmArguments.add('-Ddevauth.enabled=true')
+            jvmArguments.add('-Ddevauth.configDir=C:/Users/deoxd/.devauth')
+            jvmArguments.add('-Ddevauth.account=main')
+        }
+        server {
+            server()
+            gameDirectory = rootProject.file('run')
+        }
+        data {
+            data()
+            programArguments.addAll '--mod', mod_id, '--all', file('src/generated/resources').absolutePath, file('src/main/resources').absolutePath
+            gameDirectory = rootProject.file('run')
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+def archives_name = "${rootProject.jar_name_start}"
+if (hasProperty('mod_addon') && mod_addon.toBoolean()) {
+    archives_name += "-${mod_id}-${mod_version}"
+}
+archives_name += "${rootProject.jar_name_mcnf_versions}"
+if (hasProperty('mod_appendix')) {
+    archives_name += "-${mod_appendix}"
+}
+
+base {
+    archivesName = archives_name
+}
+
+tasks.named('jar') {
+    version = ''  // Prevent version suffix
+}
+
+tasks.named('build') {
+    doLast {
+        copy {
+            from "${buildDir}/libs"
+            into rootProject.file('finalJars')
+            include '*.jar'
+        }
+    }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : rootProject.minecraft_version,
+            neoforge_version       : rootProject.neoforge_version,
+            loader_version         : rootProject.loader_version,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_version            : mod_version,
+            mod_license            : rootProject.mod_license,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            mod_display_url        : rootProject.mod_display_url,
+            mod_issue_tracker_url  : rootProject.mod_issue_tracker_url
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+tasks.configureEach {
+    gradle.startParameter.taskNames.forEach { n ->
+        if (n.contains(mod_id) || n == "cleanAll" || n == "buildAll") {
+            enabled = true
+        }
+    }
+}
