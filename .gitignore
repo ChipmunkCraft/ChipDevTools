@@ -24,6 +24,10 @@ finalJars/
 /logs/
 crash-reports/
 
+/addonexample/.settings/
+/addonexample/bin/
+/addonexample/build/
+
 # Misc
 *.log
 *.tmp
